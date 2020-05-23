@@ -47,11 +47,11 @@ jobs:
           name: Jest test
           working_directory: .
           command: |
-            yarn test --coverage --silent --detectOpenHandles
+            yarn test --coverage --silent
 
       - codecov/upload:
           file: ./coverage/lcov.info
-          token: 0808f5a0-dd33-4a20-89fa-314e39a75711
+          token: $CODECOV_TOKEN
 
 workflows:
   version: 2.1
