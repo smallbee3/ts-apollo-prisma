@@ -17,7 +17,7 @@ const schemaWithMiddleware = NODE_ENV === 'test'
     permissions,
   );
 
-const createApolloServer = (): ApolloServer => new ApolloServer({
+export const createApolloServer = (): ApolloServer => new ApolloServer({
   schema: schemaWithMiddleware,
   context: createContext,
   introspection: process.env.NODE_ENV !== 'production',

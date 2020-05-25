@@ -5,10 +5,11 @@ import NodeWebSocket from 'ws';
 import { PrismaClient } from '@prisma/client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { WebSocketLink } from 'apollo-link-ws';
+import { createApolloServer } from '../../src/server';
 import { createApp } from '../../src/app';
+import { createServer as createHttpServer } from 'http';
 import { exec } from 'child_process';
 import express from 'express';
-import { startServer } from '../../src/server';
 
 const prisma = new PrismaClient();
 const port = 5000;
@@ -20,7 +21,17 @@ const testSubscriptionHost = `ws://localhost:${port}/graphql`;
 
 beforeAll(async (done) => {
   const app: express.Application = createApp();
-  server = await startServer(app);
+
+  server = createHttpServer(app);
+  const apollo = createApolloServer();
+  // @ts-ignore
+  apollo.installSubscriptionHandlers(server);
+  server.listen(port, () => {
+    apollo.applyMiddleware({ app });
+    process.stdout.write(
+      `🚀 Server ready at http://localhost:${port}${apollo.graphqlPath}\n`,
+    );
+  });
 
   networkInterface = new SubscriptionClient(
     testSubscriptionHost,
