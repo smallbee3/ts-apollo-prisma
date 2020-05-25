@@ -8,7 +8,7 @@ import { schema } from './schema';
 
 const { PORT = 5000 } = process.env;
 
-const createApolloServer = (): ApolloServer => new ApolloServer({
+export const createApolloServer = (): ApolloServer => new ApolloServer({
   schema,
   context: createContext,
   introspection: process.env.NODE_ENV !== 'production',
