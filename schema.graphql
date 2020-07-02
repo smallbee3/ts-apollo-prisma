@@ -23,6 +23,11 @@ scalar Date
 
 scalar DateTime
 
+type edgesConnection {
+  cursor: String!
+  node: Int!
+}
+
 scalar Gender
 
 type Mutation {
@@ -32,6 +37,24 @@ type Mutation {
   signIn(email: String!, password: String!): AuthPayload!
   signUp(user: UserCreateInput): AuthPayload!
   updateProfile(user: UserUpdateInput): User!
+}
+
+type pageConnection {
+  cursor: String!
+  isCurrent: Boolean!
+  page: Int!
+}
+
+type pageCursorsConnection {
+  around: [pageConnection!]
+  first: pageConnection
+  last: pageConnection
+  previous: pageConnection
+}
+
+type paginationConnection {
+  edges: [edgesConnection!]
+  pageCursors: pageCursorsConnection
 }
 
 type Post {
@@ -78,7 +101,7 @@ type User {
   nickname: String
   phone: String
   photoURL: String
-  posts: [Post!]!
+  posts(buttonNum: Int, currentPage: Int, cursor: Int, size: Int): paginationConnection!
   profile: Profile
   thumbURL: String
   updatedAt: DateTime!
