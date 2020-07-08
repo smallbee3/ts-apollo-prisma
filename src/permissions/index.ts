@@ -31,4 +31,7 @@ export const permissions = shield({
     deletePost: rules.isPostOwner,
     publish: rules.isPostOwner,
   },
-});
+}, {
+  allowExternalErrors: process.env.NODE_ENV !== 'production',
+},
+);
